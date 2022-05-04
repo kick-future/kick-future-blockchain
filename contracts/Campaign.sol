@@ -5,7 +5,7 @@ contract Campaign {
     struct Request {
         string description;
         uint value;
-        address recipient;
+        address to;
         bool complete;
         uint numberOfApproved;
         uint numberAllApprovers;
@@ -35,5 +35,18 @@ contract Campaign {
             donators[sender] = true;
             numberOfDonators++;
         }
+    }
+
+    function createRequest(string memory _description, uint _value, address _to) public {
+        require(msg.sender == creator);
+
+        Request storage request = requests.push();
+
+        request.description = _description;
+        request.value = _value;
+        request.to = _to;
+        request.complete = false;
+        request.numberOfApproved = 0;
+        request.numberAllApprovers = 0;
     }
 }
