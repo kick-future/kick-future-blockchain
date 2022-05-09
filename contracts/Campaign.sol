@@ -24,6 +24,10 @@ contract Campaign {
         creator = _creator;
     }
 
+    function getCountRequests() public view returns(uint) {
+        return requests.length;
+    }
+
     function donate() public payable {
         uint value = msg.value;
         address sender = msg.sender;
@@ -48,5 +52,16 @@ contract Campaign {
         request.complete = false;
         request.numberOfApproved = 0;
         request.numberAllApprovers = 0;
+    }
+
+    function approveRequest(uint index) public {
+        address sender = msg.sender;
+        require(donators[sender]);
+
+        Request storage request = requests[index];
+        require(!request.approvals[sender]);
+
+        request.approvals[sender] = true;
+        request.numberOfApproved++;
     }
 }
